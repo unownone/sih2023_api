@@ -6,16 +6,16 @@
 
 ### Planned Features:
 
-- [] Telegram bot to get data on demand
+- [ ] Telegram bot to get data on demand
 
-  - [] Similarity Search
-  - [] GPT Integration
-  - [] Watching Problem Statements (Per Account Async updates)
+  - [ ] Similarity Search
+  - [ ] GPT Integration
+  - [ ] Watching Problem Statements (Per Account Async updates)
 
-- [] Web App to get data on demand
-  - [] Similarity Search
-  - [] GPT Integration
-  - [] Watching Problem Statements (Per Account Async updates)
+- [ ] Web App to get data on demand
+  - [ ] Similarity Search
+  - [ ] GPT Integration
+  - [ ] Watching Problem Statements (Per Account Async updates)
 
 ### Feature Definition:
 
