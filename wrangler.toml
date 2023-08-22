@@ -1,0 +1,11 @@
+# Top-level configuration
+name = "sih-api-2023"
+main = "src/server.ts"
+compatibility_date = "2023-07-12"
+
+workers_dev = false
+route = "sih.ikr.one"
+
+# Set up crons later on
+# [triggers]
+# crons = ["15 * * * *"]
