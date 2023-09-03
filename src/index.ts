@@ -6,29 +6,20 @@ import type {
   ExecutionContext,
 } from "@cloudflare/workers-types/experimental";
 import { insertProblemStatements } from "./db/handlers/probStmt";
-
-async function updateData(db: DrizzleDB) {
-  const newData = await getCurrentData();
-  await insertProblemStatements(db, newData);
-  return;
-}
+import { updateData } from "./handlers/cron";
+import router from "./handlers/api";
+import { error, json } from "itty-router";
 
 export default {
-  scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+  scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
     const db = getDb(env.DATABASE_URL);
     ctx.waitUntil(updateData(db));
   },
 
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
-    const uri = new URL(request.url);
-    if (request.method === "GET" && uri.pathname === "/") {
-      const db = getDb(env.DATABASE_URL);
-      const data = await getAllProblemStatements(db);
-      return new Response(JSON.stringify(data), {
-        headers: { "content-type": "application/json" },
-        status: 200,
-      });
-    }
-    return new Response("Not Found", { status: 404 });
+    return router
+      .handle(request, ctx, env)
+      .then(json) // send as JSON
+      .catch(error); // catch errors
   },
 };

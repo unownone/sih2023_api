@@ -1,6 +1,11 @@
-@HOST = localhost:8787
+@LOCAL_HOST = localhost:8787
+@HOST = sih.ikr.one
 
-
-### Run Scheduled
+### Run
 GET / HTTP/1.1
-Host:{{HOST}}
+Host:{{LOCAL_HOST}}
+
+
+### Run on Deployed
+GET / HTTP/1.1
+Host: {{HOST}}
