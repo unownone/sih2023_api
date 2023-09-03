@@ -50,8 +50,27 @@ paths:
                     type: integer
                   prevPage: 
                     type: integer
-
+  /all:
+    get:
+      summary: Returns all data
+      description: Returns all data, only available for admins
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: All the data.
+          content: 
+            application/json:
+              schema:
+                type: array
+                items: 
+                  $ref: '#/components/schemas/ProblemStatement'   
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
   schemas:
     ProblemStatement:
       type: object
