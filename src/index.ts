@@ -9,6 +9,7 @@ import { insertProblemStatements } from "./db/handlers/probStmt";
 import { updateData } from "./handlers/cron";
 import router from "./handlers/api";
 import { error, json } from "itty-router";
+import { DEFAULT_HEADERS } from "./util/constants";
 
 export default {
   scheduled(_event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
@@ -19,7 +20,11 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     return router
       .handle(request, ctx, env)
-      .then(json) // send as JSON
+      .then((res) => {
+        return json(res, {
+          headers: DEFAULT_HEADERS,
+        });
+      }) // send as JSON
       .catch(error); // catch errors
   },
 };
