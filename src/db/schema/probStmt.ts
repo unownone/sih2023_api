@@ -7,7 +7,7 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
-export const ProblemStatements = pgTable("problem_statements", {
+export const problemStatements = pgTable("problem_statements", {
   id: serial("id").primaryKey(),
   ps_code: varchar("ps_code", {
     length: 10,
@@ -34,3 +34,5 @@ export const ProblemStatements = pgTable("problem_statements", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+export const IProblemStatement = problemStatements.$inferSelect;
