@@ -4,6 +4,7 @@ import { IRequest } from "itty-router";
 export type Env = {
   TELEGRAM_BOT_TOKEN: string;
   DATABASE_URL: string;
+  API_KEY: string;
 };
 
 export type DrizzleDB = NeonHttpDatabase;

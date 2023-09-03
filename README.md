@@ -22,9 +22,15 @@
 - JSON API
   Api that returns all the data in JSON format
 
+Request:
+
+```shell
+  curl https://sih.ikr.one/?page=1&size=1
+```
+
 ```json
 [
-  {
+  "data": {
     "id": 1516,
     "ps_code": "SIH1516",
     "title": "Suggest an Al-based solution to enable ease of grievance lodging and tracking for\ncitizens across multiple departments",
@@ -33,7 +39,9 @@
     "category": "Software",
     "domain": "Smart Automation",
     "submissions": 0
-  }
+  },
+  "count": 1,
+  "page": 1
 ]
 ```
 

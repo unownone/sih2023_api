@@ -1,20 +1,19 @@
 import {
   error, // creates error responses
-  json, // creates JSON responses
   Router, // the ~440 byte router itself
-  withParams,
 } from "itty-router";
-import { addPaginationParams } from "../../util/middlewares";
-import { getData } from "./data";
+import { addPaginationParams, isValidUser } from "../../util/middlewares";
+import { getAllData, getData } from "./data";
+import { NotFoundError } from "./errors";
 
 const router = Router({
   base: "/",
 });
 
 router
-  // 404 for everything else
-  .get("/", addPaginationParams, getData)
-  // .get("/all", isValidUser, getAllData)
-  .all("*", () => error(404));
+  // @ts-ignore
+  .get("/", addPaginationParams, getData) // Only get paginated Data
+  .get("/all", isValidUser, getAllData) // get all data
+  .all("*", NotFoundError); // Not Found Error
 
 export default router;

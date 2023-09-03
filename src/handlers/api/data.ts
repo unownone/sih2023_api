@@ -19,3 +19,13 @@ export async function getData(
   );
   return data;
 }
+
+export async function getAllData(
+  request: PaginatedRequest,
+  ex: ExecutionContext,
+  env: Env
+) {
+  const db = getDb(env.DATABASE_URL);
+  const data = await getAllProblemStatements(db);
+  return data;
+}
