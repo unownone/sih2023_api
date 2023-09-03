@@ -1,21 +1,26 @@
 import { load, Element, Cheerio } from "cheerio";
-import { ProblemStatement } from "./types";
+import { IProblemStatement } from "./types";
 
 export async function getCurrentData() {
   const data = await fetch("https://www.sih.gov.in/sih2023PS");
 
   const $ = load(await data.text());
 
-  const problem_statements: ProblemStatement[] = [];
+  const problem_statements: IProblemStatement[] = [];
 
   $("[id^='ViewProblemStatement']").each((i, el) => {
-    problem_statements.push(getPSData($(el)));
+    problem_statements.push(parsePSData($(el)));
   });
 
   return problem_statements;
 }
 
-function getPSData($el: Cheerio<Element>) {
+/**
+ * Parses the Problem Statement from HTML Element
+ * @param $el Cheerio Element containing a single problem statement
+ * @returns
+ */
+function parsePSData($el: Cheerio<Element>) {
   let id = parseInt($el.attr("id")!.split("ViewProblemStatement")[1]);
 
   const parent = $el.parent();
@@ -92,6 +97,6 @@ function getPSData($el: Cheerio<Element>) {
     youtube,
     dataset,
     submissions,
-  } as ProblemStatement;
+  } as IProblemStatement;
   return data;
 }

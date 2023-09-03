@@ -1,7 +1,7 @@
 import { Telegraf } from "telegraf";
 import { getCurrentData } from "./data";
 
-const hook_path = "/tele";
+const hook_path = "/telegram/webhook";
 const welcomeMessage = `Welcome to SIH2023 status Bot`;
 
 const last = new Date();
@@ -23,12 +23,8 @@ bot.command("status", async (ctx) => {
   //   ctx.editMessageText(`Got a total of ${data.length} problem statements`);
 });
 
-if (process.env.NODE_ENV === "development") {
-  bot.launch();
-} else {
-  bot.webhookCallback(hook_path);
-}
-
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
+
+export default bot;

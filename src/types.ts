@@ -1,4 +1,4 @@
-export interface ProblemStatement {
+export interface IProblemStatement {
   /**
    * Problem Statement Number
    * eg:SIH1248
@@ -55,6 +55,12 @@ export interface ProblemStatement {
   submissions: number;
 }
 
-export interface Env {
-  TELEGRAM_BOT_TOKEN: string;
+export interface IProblemStatementDB extends IProblemStatement {
+  createdAt: Date;
+  updatedAt: Date;
 }
+
+export type Env = {
+  TELEGRAM_BOT_TOKEN: string;
+  CACHE_DB: D1Database;
+};
