@@ -1,20 +1,36 @@
-import { integer, sqliteTable, text, index } from "drizzle-orm/sqlite-core";
+import {
+  pgTable,
+  serial,
+  text,
+  integer,
+  varchar,
+  timestamp,
+} from "drizzle-orm/pg-core";
 
-export const ProblemStatements = sqliteTable("problem_statements", {
-  id: integer("id").primaryKey(),
-  ps_code: text("ps_code").notNull().unique(),
+export const ProblemStatements = pgTable("problem_statements", {
+  id: serial("id").primaryKey(),
+  ps_code: varchar("ps_code", {
+    length: 10,
+  })
+    .notNull()
+    .unique(),
   title: text("title").notNull(),
   description: text("description"),
-  org: text("org").notNull(),
-  category: text("category"),
-  domain: text("domain"),
-  youtube: text("youtube"),
+  org: varchar("org", {
+    length: 128,
+  }).notNull(),
+  category: varchar("category", {
+    length: 16,
+    enum: ["SOFTWARE", "HARDWARE"],
+  }),
+  domain: varchar("domain", {
+    length: 64,
+  }),
+  youtube: varchar("youtube", {
+    length: 128,
+  }),
   dataset: text("dataset"),
   submissions: integer("submissions").default(0).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
-    () => new Date()
-  ),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(
-    () => new Date()
-  ),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
