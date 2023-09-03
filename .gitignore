@@ -101,7 +101,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
-.vars
+*.vars
 # parcel-bundler cache (https://parceljs.org/)
 
 .cache
@@ -171,3 +171,4 @@ dist
 wrangler.toml
 .wrangler/*
 migrations/
+drizzle/

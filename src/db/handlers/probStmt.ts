@@ -1,20 +1,23 @@
-import { drizzle } from "drizzle-orm/d1";
 import { ProblemStatements } from "../schema/probStmt";
-import { IProblemStatement, IProblemStatementDB } from "../../types";
+import { DrizzleDB, IProblemStatement, IProblemStatementDB } from "../../types";
+import { neon, neonConfig } from "@neondatabase/serverless";
+import { NeonHttpDatabase, drizzle } from "drizzle-orm/neon-http";
 
-const getDb = (db: D1Database) => drizzle(db);
+neonConfig.fetchConnectionCache = true;
 
-export async function getAllProblemStatements(dbObj: D1Database) {
-  const db = getDb(dbObj);
+export const getDb = (url: string) => {
+  const sql = neon(url);
+  return drizzle(sql);
+};
+
+export async function getAllProblemStatements(db: DrizzleDB) {
   const data = await db.select().from(ProblemStatements);
   return data as IProblemStatementDB[];
 }
 
 export async function insertProblemStatements(
-  dbObj: D1Database,
+  db: DrizzleDB,
   data: IProblemStatement[]
 ) {
-  const db = getDb(dbObj);
-
   return await db.insert(ProblemStatements).values(data);
 }

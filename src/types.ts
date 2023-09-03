@@ -1,3 +1,5 @@
+import { NeonHttpDatabase } from "drizzle-orm/neon-http";
+
 export interface IProblemStatement {
   /**
    * Problem Statement Number
@@ -62,5 +64,7 @@ export interface IProblemStatementDB extends IProblemStatement {
 
 export type Env = {
   TELEGRAM_BOT_TOKEN: string;
-  CACHE_DB: D1Database;
+  DATABASE_URL: string;
 };
+
+export type DrizzleDB = NeonHttpDatabase;
