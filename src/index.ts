@@ -1,13 +1,11 @@
-import { DrizzleDB, Env } from "./types";
-import { getAllProblemStatements, getDb } from "./db/handlers/probStmt";
-import { getCurrentData } from "./data";
+import { Env } from "./types";
+import { getDb } from "./db/handlers/probStmt";
 import type {
   ScheduledEvent,
   ExecutionContext,
 } from "@cloudflare/workers-types/experimental";
-import { insertProblemStatements } from "./db/handlers/probStmt";
 import { updateData } from "./handlers/cron";
-import router from "./handlers/api";
+import router, { corsify } from "./handlers/api";
 import { error, json } from "itty-router";
 import { DEFAULT_HEADERS } from "./util/constants";
 
@@ -25,6 +23,7 @@ export default {
           headers: DEFAULT_HEADERS,
         });
       }) // send as JSON
-      .catch(error); // catch errors
+      .catch(error) // catch errors
+      .then(corsify);
   },
 };
