@@ -3,18 +3,17 @@ import type {
   ScheduledEvent,
   ExecutionContext,
 } from "@cloudflare/workers-types/experimental";
-import { ProblemStatements } from "./db/schema/probStmt";
-import { drizzle } from "drizzle-orm/d1";
+import { insertProblemStatements } from "./db/handlers/probStmt";
+import { Env } from "./types";
+
 export default {
-  async scheduled(event: ScheduledEvent, env: unknown, ctx: ExecutionContext) {
-    ctx.waitUntil(updateData());
+  async scheduled(event: ScheduledEvent, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil(updateData(env.CACHE_DB));
   },
 };
 
-const db = drizzle(env.DB);
-
-async function updateData() {
+async function updateData(dbObj: D1Database) {
   const newData = await getCurrentData();
-  const inserted = await db.insert(ProblemStatements).values(newData).run();
+  await insertProblemStatements(dbObj, newData);
   return;
 }

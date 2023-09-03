@@ -169,3 +169,5 @@ dist
 .pnp.\*
 
 wrangler.toml
+.wrangler/*
+migrations/

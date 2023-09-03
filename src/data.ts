@@ -1,12 +1,12 @@
 import { load, Element, Cheerio } from "cheerio";
-import { ProblemStatement } from "./types";
+import { IProblemStatement } from "./types";
 
 export async function getCurrentData() {
   const data = await fetch("https://www.sih.gov.in/sih2023PS");
 
   const $ = load(await data.text());
 
-  const problem_statements: ProblemStatement[] = [];
+  const problem_statements: IProblemStatement[] = [];
 
   $("[id^='ViewProblemStatement']").each((i, el) => {
     problem_statements.push(parsePSData($(el)));
@@ -97,6 +97,6 @@ function parsePSData($el: Cheerio<Element>) {
     youtube,
     dataset,
     submissions,
-  } as ProblemStatement;
+  } as IProblemStatement;
   return data;
 }
