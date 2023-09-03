@@ -1,0 +1,96 @@
+openapi: '3.0.2'
+info:
+  title: SIH 2023 API
+  # description: Unofficial SIH 2023 API
+  version: '0.0.1'
+servers:
+  - url: https://sih.ikr.one/
+    description: Main Cloudflare Worker API
+paths:
+  /:
+    get:
+      summary: Returns a paginated response of all the problem statements
+      description: Returns a paginated response of all the problem statements
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number, defaults to 1
+        - in: query
+          name: size
+          schema:
+            type: integer
+          description: Number of items per page , defaults to 20, max 50
+      responses:
+        '200':    # status code
+          description: A paginated Response of problem statements
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  data: 
+                    type: array
+                    items: 
+                      $ref: '#/components/schemas/ProblemStatement'                   
+                  page: 
+                    type: integer
+                  limit: 
+                    type: integer
+                  total: 
+                    type: integer
+                  totalPages: 
+                    type: integer
+                  hasNextPage: 
+                    type: boolean
+                  hasPrevPage: 
+                    type: boolean
+                  nextPage: 
+                    type: integer
+                  prevPage: 
+                    type: integer
+
+components:
+  schemas:
+    ProblemStatement:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 10
+        ps_code:
+          type: string
+          example: SIH1203
+        title:
+          type: string
+          example: Some Great Idea
+        description:
+          type: string
+          example: Some equally great description
+        org:
+          type: string
+          example: Some great org
+        category:
+          type: string
+          enum: [SOFTWARE,HARDWARE]
+          example: SOFTWARE
+        domain:
+          type: string
+          example: Ministry of Examples
+        youtube:
+          type: string
+          format: url
+          example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+        dataset:
+          type: string
+          format: url
+          example: https://www.kaggle.com/ikr7/sih2023
+        createdAt:
+          type: string
+          format: date-time
+          example: 2021-07-10T18:30:00.000Z
+        updatedAt:
+          type: string
+          format: date-time
+          example: 2021-07-10T18:30:00.000Z
