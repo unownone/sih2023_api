@@ -21,7 +21,7 @@ export const problemStatements = pgTable("problem_statements", {
   }).notNull(),
   category: varchar("category", {
     length: 16,
-    enum: ["SOFTWARE", "HARDWARE"],
+    enum: ["Software", "Hardware"],
   }),
   domain: varchar("domain", {
     length: 64,

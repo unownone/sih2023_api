@@ -3,6 +3,7 @@
 ### Current Features:
 
 - [x] Base API to scrape data on demand [GET] `https://sih.ikr.one/`
+- Documentation at [Swagger hub](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/unownone/sih2023_api/main/openapi.yml)
 
 ### Planned Features:
 
@@ -16,6 +17,8 @@
   - [ ] Similarity Search
   - [ ] GPT Integration
   - [ ] Watching Problem Statements (Per Account Async updates)
+
+### API Documentation At:
 
 ### Feature Definition:
 

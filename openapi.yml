@@ -73,8 +73,8 @@ components:
           example: Some great org
         category:
           type: string
-          enum: [SOFTWARE,HARDWARE]
-          example: SOFTWARE
+          enum: [Software,Hardware]
+          example: Software
         domain:
           type: string
           example: Ministry of Examples
