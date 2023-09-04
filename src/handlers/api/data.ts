@@ -1,4 +1,3 @@
-import { IRequest } from "itty-router";
 import {
   getAllProblemStatements,
   getDb,
@@ -6,37 +5,44 @@ import {
 } from "../../db/handlers/probStmt";
 import { Env, PaginatedRequest } from "../../types";
 import { handleCache } from "../../util/cache";
+import { CACHE_MAX_AGE, DEFAULT_HEADERS } from "../../util/constants";
 
 export async function getData(
   request: PaginatedRequest,
   ctx: ExecutionContext,
   env: Env
 ) {
-  const db = getDb(env.DATABASE_URL);
-
-  const response = await handleCache(request, ctx, async () => {
+  return handleCache(request, ctx, env, async (request, ctx, env) => {
+    const db = getDb(env.DATABASE_URL);
     const data = await getPaginatedProblemstatements(
       db,
       request.query.page,
       request.query.size
     );
     return new Response(JSON.stringify(data), {
+      status: 200,
       headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "max-age=3600",
+        ...DEFAULT_HEADERS,
+        Expires: new Date(Date.now() + CACHE_MAX_AGE * 1000).toUTCString(),
       },
     });
   });
-
-  return response;
 }
 
 export async function getAllData(
   request: PaginatedRequest,
-  ex: ExecutionContext,
+  ctx: ExecutionContext,
   env: Env
 ) {
-  const db = getDb(env.DATABASE_URL);
-  const data = await getAllProblemStatements(db);
-  return data;
+  return handleCache(request, ctx, env, async (request, ctx, env) => {
+    const db = getDb(env.DATABASE_URL);
+    const data = await getAllProblemStatements(db);
+    return new Response(JSON.stringify(data), {
+      status: 200,
+      headers: {
+        ...DEFAULT_HEADERS,
+        Expires: new Date(Date.now() + CACHE_MAX_AGE * 1000).toUTCString(),
+      },
+    });
+  });
 }

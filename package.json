@@ -18,6 +18,7 @@
     "cheerio": "^1.0.0-rc.12",
     "drizzle-orm": "^0.28.5",
     "itty-router": "^4.0.22",
+    "itty-time": "^0.2.2",
     "jsdom": "^22.1.0",
     "telegraf": "^4.12.2",
     "wrangler": "^3.5.1"

@@ -1,3 +1,6 @@
+import { IRequest } from "itty-router";
+import { Env } from "../types";
+
 /**
  *  Cache a response
  * @param request
@@ -8,16 +11,31 @@
 export async function handleCache(
   request: Request,
   ctx: ExecutionContext,
-  getCacheResponse: () => Promise<Response>
+  env: Env,
+  getCacheResponse: (...args: any[]) => Promise<Response>
 ) {
   const cache = caches.default;
-  const cachedData = await cache.match(request);
+  let cachedData = await cache.match(request);
   if (cachedData) {
     console.log("Cache HIT");
+    cachedData;
     return cachedData;
   }
   console.log("Cache MISS");
-  const response = await getCacheResponse();
-  ctx.waitUntil(cache.put(request, response.clone()));
+  const response = await getCacheResponse(request, ctx, env);
+  setCache(ctx, request, response.clone());
   return response;
+}
+
+/**
+ * Sets cache with proper status
+ * @param ctx
+ * @param request
+ * @param response
+ */
+function setCache(ctx: ExecutionContext, request: Request, response: Response) {
+  const resp = new Response(response.body, {
+    ...response,
+  });
+  ctx.waitUntil(caches.default.put(request, resp));
 }

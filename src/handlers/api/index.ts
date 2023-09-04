@@ -6,7 +6,6 @@ import {
 import { addPaginationParams, isValidUser } from "../../util/middlewares";
 import { getAllData, getData } from "./data";
 import { NotFoundError } from "./errors";
-
 export const { preflight, corsify } = createCors();
 
 const router = Router({

@@ -2,6 +2,7 @@ import { IRequest } from "itty-router";
 import { MAX_PAGE_SIZE, PAGE_SIZE } from "./constants";
 import { Env, PaginatedRequest } from "../types";
 import { UnauthorizedError } from "../handlers/api/errors";
+import { handleCache } from "./cache";
 
 export async function addPaginationParams(request: PaginatedRequest) {
   const { page, size } = request.query;
