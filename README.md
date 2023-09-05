@@ -28,7 +28,7 @@
 Request:
 
 ```shell
-  curl https://sih.ikr.one/?page=1&size=1
+  curl https://sih.ikr.one/api4§?page=1&size=1
 ```
 
 ```json

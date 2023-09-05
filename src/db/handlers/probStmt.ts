@@ -1,11 +1,11 @@
 import { problemStatements, IProblemStatement } from "../schema/probStmt";
-import { DrizzleDB, PaginatedResponse } from "../../types";
+import { DrizzleDB, IPaginationQuery, PaginatedResponse } from "../../types";
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import {
   drizzle as poolDrizzle,
   NeonDatabase,
 } from "drizzle-orm/neon-serverless";
-import { eq } from "drizzle-orm";
+import { eq, ilike, or } from "drizzle-orm";
 
 neonConfig.fetchConnectionCache = true;
 
@@ -17,17 +17,26 @@ export const getDb = (url: string): DrizzleDB => {
 
 export async function getPaginatedProblemstatements(
   db: DrizzleDB,
-  offset: number,
-  limit: number
+  query: IPaginationQuery
 ) {
-  const data = await db
+  const db_query = db
     .select()
     .from(problemStatements)
-    .limit(limit)
-    .offset(offset * limit);
+    .limit(query.size)
+    .offset(query.page * query.size);
+  if (query.search) {
+    db_query.where(
+      or(
+        ilike(problemStatements.ps_code, `%${query.search}%`),
+        ilike(problemStatements.title, `%${query.search}%`),
+        ilike(problemStatements.description, `%${query.search}%`)
+      )
+    );
+  }
+  const data = await db_query;
   return {
     data: data as (typeof IProblemStatement)[],
-    page: offset + 1,
+    page: query.page + 1,
     count: data.length,
   } as PaginatedResponse<typeof IProblemStatement>;
 }

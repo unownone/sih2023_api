@@ -12,10 +12,15 @@ export type DrizzleDB = NeonDatabase;
 export interface IPaginationQuery {
   page: number;
   size: number;
+  search?: string;
+}
+
+export interface IQuery {
   [key: string]: any;
 }
+
 export interface PaginatedRequest extends IRequest {
-  query: IPaginationQuery;
+  query: IQuery & IPaginationQuery;
 }
 
 export interface PaginatedResponse<T> {

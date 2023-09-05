@@ -7,7 +7,7 @@ servers:
   - url: https://sih.ikr.one/
     description: Main Cloudflare Worker API
 paths:
-  /:
+  /api:
     get:
       summary: Returns a paginated response of all the problem statements
       description: Returns a paginated response of all the problem statements
@@ -50,7 +50,7 @@ paths:
                     type: integer
                   prevPage: 
                     type: integer
-  /all:
+  /api/all:
     get:
       summary: Returns all data
       description: Returns all data, only available for admins

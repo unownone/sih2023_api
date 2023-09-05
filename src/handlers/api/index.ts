@@ -1,6 +1,5 @@
 import {
   createCors,
-  error, // creates error responses
   Router, // the ~440 byte router itself
 } from "itty-router";
 import { addPaginationParams, isValidUser } from "../../util/middlewares";
@@ -8,11 +7,11 @@ import { getAllData, getData } from "./data";
 import { NotFoundError } from "./errors";
 export const { preflight, corsify } = createCors();
 
-const router = Router({
-  base: "/",
+const api_router = Router({
+  base: "/api",
 });
 
-router
+api_router
   // for cors
   .all("*", preflight)
   // @ts-ignore
@@ -20,4 +19,4 @@ router
   .get("/all", isValidUser, getAllData) // get all data
   .all("*", NotFoundError); // Not Found Error
 
-export default router;
+export default api_router;
