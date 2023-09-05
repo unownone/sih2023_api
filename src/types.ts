@@ -1,4 +1,4 @@
-import { NeonHttpDatabase } from "drizzle-orm/neon-http";
+import { NeonDatabase } from "drizzle-orm/neon-serverless";
 import { IRequest } from "itty-router";
 
 export type Env = {
@@ -7,7 +7,7 @@ export type Env = {
   API_KEY: string;
 };
 
-export type DrizzleDB = NeonHttpDatabase;
+export type DrizzleDB = NeonDatabase;
 
 export interface IPaginationQuery {
   page: number;

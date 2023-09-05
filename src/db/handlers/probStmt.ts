@@ -1,13 +1,18 @@
 import { problemStatements, IProblemStatement } from "../schema/probStmt";
 import { DrizzleDB, PaginatedResponse } from "../../types";
-import { neon, neonConfig } from "@neondatabase/serverless";
-import { NeonHttpDatabase, drizzle } from "drizzle-orm/neon-http";
+import { Pool, neonConfig } from "@neondatabase/serverless";
+import {
+  drizzle as poolDrizzle,
+  NeonDatabase,
+} from "drizzle-orm/neon-serverless";
+import { eq } from "drizzle-orm";
 
 neonConfig.fetchConnectionCache = true;
 
-export const getDb = (url: string) => {
-  const sql = neon(url);
-  return drizzle(sql);
+export const getDb = (url: string): DrizzleDB => {
+  const client = new Pool({ connectionString: url, max: 50 });
+
+  return poolDrizzle(client);
 };
 
 export async function getPaginatedProblemstatements(
@@ -33,8 +38,47 @@ export async function getAllProblemStatements(db: DrizzleDB) {
 }
 
 export async function insertProblemStatements(
-  db: DrizzleDB,
-  data: (typeof IProblemStatement)[]
+  dbPool: DrizzleDB & NeonDatabase,
+
+  scraped_data: (typeof IProblemStatement)[]
 ) {
-  return await db.insert(problemStatements).values(data);
+  const updateObj: (typeof IProblemStatement)[] = [];
+  console.log("Starting transaction");
+  await dbPool.transaction(async (trx) => {
+    const db_data = await trx
+      .select({
+        ps_code: problemStatements.ps_code,
+        submissions: problemStatements.submissions,
+      })
+      .from(problemStatements);
+    console.log("Got db data");
+    const db_map: { [key: string]: number } = db_data.reduce(
+      (map: { [key: string]: number }, obj) => {
+        map[obj.ps_code] = obj.submissions;
+        return map;
+      },
+      {}
+    );
+    const awaitable: Promise<any>[] = [];
+    console.log("Checking/matching data");
+    scraped_data.map((obj) => {
+      if (obj.submissions != db_map[obj.ps_code]) {
+        // Save them in updateObj to be updates for telegram,etc
+        updateObj.push(obj);
+
+        // if submissions are not equal, update the db
+        awaitable.push(
+          trx
+            .update(problemStatements)
+            .set({ submissions: obj.submissions })
+            .where(eq(problemStatements.ps_code, obj.ps_code))
+        );
+      }
+    });
+    // Wait for all the updates to complete
+    console.log("Waiting for updates to complete. Count: ", awaitable.length);
+    await Promise.all(awaitable);
+  });
+  console.log("Finished updates...");
+  // Handle UpdateObj
 }

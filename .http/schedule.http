@@ -1,6 +1,6 @@
-@LOCAL_HOST = localhost:8787
+@LOCAL_HOST=localhost:8787
 
 
 ### Run Scheduled
 GET /__scheduled?cron=*+*+*+*+* HTTP/1.1
-Host={{LOCAL_HOST}}
+Host:{{LOCAL_HOST}}
